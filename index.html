@@ -3,561 +3,950 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday ❤️</title>
+<title>Happy Birthday</title>
 <style>
-  :root {
-    --bg: #000;
-    --surface: #0a0a0a;
-    --card: #111;
-    --border: rgba(255,255,255,0.08);
-    --text: #f5f5f7;
-    --muted: #86868b;
-    --accent: #ff375f;
-    --accent2: #bf5af2;
-    --pink-soft: rgba(255,55,95,0.12);
-  }
+/* ─── TOKENS ──────────────────────────────────────────── */
+:root {
+  --bg:        #000000;
+  --bg-2:      #0a0a0a;
+  --bg-3:      #111111;
+  --border:    rgba(255,255,255,0.07);
+  --border-hi: rgba(255,255,255,0.14);
+  --text:      #f5f5f7;
+  --text-2:    rgba(245,245,247,0.72);
+  --text-3:    #6e6e73;
+  --rose:      #ff375f;
+  --rose-dim:  rgba(255,55,95,0.14);
+  --violet:    #bf5af2;
+  --teal:      #30d5c8;
+  --amber:     #ffd60a;
+  --r12: 12px;
+  --r16: 16px;
+  --r20: 20px;
+  --r24: 24px;
+  --nav-h: 52px;
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ─── RESET ───────────────────────────────────────────── */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'SF Pro Text', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+/* ─── SCROLL PROGRESS ─────────────────────────────────── */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--rose), var(--violet));
+  z-index: 200;
+  transition: width 0.1s linear;
+}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
+/* ─── NAV ─────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: saturate(200%) blur(24px);
+  -webkit-backdrop-filter: saturate(200%) blur(24px);
+  border-bottom: 0.5px solid var(--border);
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1),
+              background 0.3s;
+}
+nav.scrolled { background: rgba(0,0,0,0.82); }
+nav.hide     { transform: translateY(-100%); }
+nav ul { display: flex; gap: 0; list-style: none; }
+nav a {
+  display: block;
+  padding: 0 1.1rem;
+  line-height: var(--nav-h);
+  color: var(--text-2);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+nav a:hover { color: var(--text); }
+nav a.active { color: var(--text); }
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 0 2rem;
-    height: 48px;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(0,0,0,0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 0.5px solid var(--border);
-    transition: transform 0.3s ease;
-  }
-  nav.hide { transform: translateY(-100%); }
-  nav ul { display: flex; gap: 2rem; list-style: none; }
-  nav a {
-    color: rgba(255,255,255,0.72);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    transition: color 0.2s;
-  }
-  nav a:hover { color: #fff; }
+/* ─── SECTIONS ────────────────────────────────────────── */
+.section {
+  min-height: 100svh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: calc(var(--nav-h) + 3rem) 1.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
 
-  /* SECTIONS */
-  section {
-    scroll-snap-align: start;
-    min-height: 100svh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 80px 2rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
+/* ─── GLOW SPOTS ──────────────────────────────────────── */
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(120px);
+}
 
-  /* HERO */
-  #home {
-    background: var(--bg);
-    text-align: center;
-    gap: 0;
-  }
-  .hero-eyebrow {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: rise 1s ease 0.2s forwards;
-  }
-  .hero-title {
-    font-size: clamp(2.8rem, 8vw, 6rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #fff 30%, #ff375f 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    opacity: 0;
-    animation: rise 1s ease 0.4s forwards;
-    margin-bottom: 0.5rem;
-  }
-  .hero-date {
-    font-size: 17px;
-    color: var(--muted);
-    font-weight: 300;
-    opacity: 0;
-    animation: rise 1s ease 0.55s forwards;
-    margin-bottom: 2.5rem;
-  }
-  .hero-photo {
-    width: clamp(160px, 22vw, 260px);
-    height: clamp(160px, 22vw, 260px);
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--border);
-    opacity: 0;
-    animation: rise 1s ease 0.7s forwards;
-    margin-bottom: 2.5rem;
-    display: block;
-  }
-  /* Fallback circle when no image */
-  .hero-photo-fallback {
-    width: clamp(160px, 22vw, 260px);
-    height: clamp(160px, 22vw, 260px);
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: clamp(3rem, 8vw, 5rem);
-    opacity: 0;
-    animation: rise 1s ease 0.7s forwards;
-    margin-bottom: 2.5rem;
-  }
-  .hero-quote {
-    font-size: clamp(1rem, 2.2vw, 1.25rem);
-    color: rgba(255,255,255,0.65);
-    font-weight: 300;
-    max-width: 580px;
-    line-height: 1.6;
-    opacity: 0;
-    animation: rise 1s ease 0.9s forwards;
-  }
+/* ─── HERO ────────────────────────────────────────────── */
+#home {
+  background: var(--bg);
+  text-align: center;
+  justify-content: center;
+  gap: 0;
+}
+.hero-glow-a {
+  width: 560px; height: 560px;
+  background: radial-gradient(circle, rgba(255,55,95,0.22) 0%, transparent 70%);
+  top: -160px; left: -160px;
+}
+.hero-glow-b {
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, rgba(191,90,242,0.18) 0%, transparent 70%);
+  bottom: -120px; right: -120px;
+}
 
-  /* Ambient glow */
-  .glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.18;
-    pointer-events: none;
-  }
-  .glow-1 { width: 500px; height: 500px; background: #ff375f; top: -100px; left: -100px; }
-  .glow-2 { width: 400px; height: 400px; background: #bf5af2; bottom: -80px; right: -80px; }
+.hero-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  animation: rise 0.9s ease 0.15s forwards;
+}
+.hero-h1 {
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  background: linear-gradient(160deg, #ffffff 20%, #ff375f 75%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.6rem;
+  opacity: 0;
+  animation: rise 0.9s ease 0.3s forwards;
+}
+.hero-date {
+  font-size: 15px;
+  color: var(--text-3);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  margin-bottom: 2.8rem;
+  opacity: 0;
+  animation: rise 0.9s ease 0.44s forwards;
+}
 
-  /* LETTER */
-  #letter {
-    background: var(--surface);
-    align-items: stretch;
-    max-width: 860px;
-    margin: 0 auto;
-    width: 100%;
-    gap: 3rem;
-  }
-  .section-label {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-    display: block;
-  }
-  .section-title {
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-    margin-bottom: 3rem;
-  }
-  .letters-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5px;
-    background: var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    width: 100%;
-  }
-  .letter-card {
-    background: var(--card);
-    padding: 2rem 2.25rem;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .letter-card.vis { opacity: 1; transform: none; }
-  .letter-card:nth-child(1) { border-radius: 20px 0 0 0; }
-  .letter-card:nth-child(2) { border-radius: 0 20px 0 0; }
-  .letter-card:nth-child(3) { border-radius: 0 0 0 20px; }
-  .letter-card:nth-child(4) { border-radius: 0 0 20px 0; }
-  .letter-card h3 {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-  }
-  .letter-card p {
-    font-size: 15px;
-    line-height: 1.75;
-    color: rgba(255,255,255,0.72);
-    font-weight: 300;
-  }
-  .letter-card:nth-child(2) h3 { color: var(--accent2); }
-  .letter-card:nth-child(3) h3 { color: #2cd9c5; }
-  .letter-card:nth-child(4) h3 { color: #ffd60a; }
+/* Photo ring — signature element */
+.photo-ring {
+  position: relative;
+  width: clamp(168px, 22vw, 240px);
+  height: clamp(168px, 22vw, 240px);
+  margin-bottom: 2.8rem;
+  opacity: 0;
+  animation: rise 0.9s ease 0.58s forwards;
+}
+.photo-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--rose), var(--violet), var(--teal), var(--rose));
+  animation: spin 8s linear infinite;
+  z-index: 0;
+}
+.photo-ring::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: var(--bg);
+  z-index: 1;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.hero-photo {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 2;
+  display: block;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+}
+.hero-photo-fallback {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.hero-photo-fallback svg { width: 56px; height: 56px; color: var(--rose); }
 
-  /* MUSIC */
-  #music {
-    background: var(--bg);
-    text-align: center;
-  }
-  .music-wrap {
-    width: 100%;
-    max-width: 540px;
-    margin-top: 2rem;
-  }
-  .music-wrap iframe {
-    width: 100%;
-    border-radius: 16px;
-    border: none;
-    display: block;
-  }
+.hero-quote {
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  color: var(--text-2);
+  font-weight: 300;
+  max-width: 560px;
+  line-height: 1.65;
+  opacity: 0;
+  animation: rise 0.9s ease 0.72s forwards;
+}
 
-  /* LOVE METER */
-  #interactive {
-    background: var(--surface);
-  }
-  .meter-card {
-    width: 100%;
-    max-width: 520px;
-    background: var(--card);
-    border: 0.5px solid var(--border);
-    border-radius: 24px;
-    padding: 2.5rem;
-    margin-top: 2rem;
-    text-align: center;
-  }
-  .meter-card h3 {
-    font-size: 21px;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    letter-spacing: -0.01em;
-  }
-  .slider-row { margin-bottom: 1rem; }
-  .slider-label {
-    font-size: 13px; color: var(--muted);
-    display: flex; justify-content: space-between;
-    margin-bottom: 0.75rem;
-  }
-  input[type=range] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%; height: 4px;
-    background: #2c2c2e;
-    border-radius: 2px;
-    outline: none;
-    margin-bottom: 0.5rem;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(255,55,95,0.5);
-  }
-  input[type=range]::-moz-range-thumb {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    border: none;
-  }
-  .slider-val {
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--accent);
-    margin: 1.25rem 0 0.75rem;
-    min-height: 56px;
-    display: block;
-  }
-  .love-msg {
-    font-size: 15px;
-    color: var(--muted);
-    min-height: 24px;
-    transition: color 0.3s;
-    font-weight: 300;
-    line-height: 1.5;
-  }
+/* Scroll cue */
+.scroll-cue {
+  position: absolute;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: rise 0.9s ease 1.1s forwards;
+}
+.scroll-cue span {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.scroll-mouse {
+  width: 22px; height: 34px;
+  border: 1.5px solid var(--border-hi);
+  border-radius: 12px;
+  position: relative;
+  display: flex; justify-content: center;
+}
+.scroll-mouse::after {
+  content: '';
+  width: 3px; height: 7px;
+  background: var(--text-3);
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  animation: scrollWheel 1.6s ease-in-out infinite;
+}
+@keyframes scrollWheel {
+  0%,100% { opacity: 1; transform: translateY(0); }
+  80%      { opacity: 0; transform: translateY(10px); }
+}
 
-  /* ENVELOPE */
-  #envelope {
-    background: var(--bg);
-    text-align: center;
-  }
-  .envelope-wrap {
-    margin-top: 3rem;
-    position: relative;
-    display: inline-block;
-  }
-  .env-btn {
-    width: 220px; height: 160px;
-    background: var(--card);
-    border: 0.5px solid var(--border);
-    border-radius: 16px;
-    cursor: pointer;
-    position: relative;
-    overflow: visible;
-    transition: transform 0.3s ease, border-color 0.3s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .env-btn:hover { transform: scale(1.03); border-color: rgba(255,55,95,0.5); }
-  .env-icon { font-size: 52px; transition: transform 0.3s; pointer-events: none; }
-  .env-btn.opened .env-icon { transform: scale(0.8) rotate(-10deg); }
-  .env-hint {
-    font-size: 12px; color: var(--muted);
-    margin-top: 1.25rem;
-    letter-spacing: 0.05em;
-  }
+/* ─── SECTION HEADER (shared) ─────────────────────────── */
+.sec-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sec-kicker svg { width: 12px; height: 12px; flex-shrink: 0; }
+.sec-h2 {
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
 
-  /* Message card pops up */
-  .msg-card {
-    position: absolute;
-    bottom: calc(100% + 1.5rem);
-    left: 50%; transform: translateX(-50%) translateY(10px);
-    width: clamp(280px, 80vw, 360px);
-    background: var(--card);
-    border: 0.5px solid rgba(255,55,95,0.35);
-    border-radius: 20px;
-    padding: 2rem;
-    text-align: left;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    box-shadow: 0 20px 60px rgba(255,55,95,0.12);
-  }
-  .msg-card.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-  }
-  .msg-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; color: var(--accent); }
-  .msg-card p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.72); font-weight: 300; margin-bottom: 0.75rem; }
-  .msg-card .sig { font-size: 13px; color: var(--muted); font-style: italic; }
+/* ─── DIVIDER ─────────────────────────────────────────── */
+.divider {
+  width: 40px;
+  height: 1px;
+  background: var(--border-hi);
+  margin: 1.6rem 0 3rem;
+}
 
-  /* FLOATING HEARTS */
-  .heart {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    font-size: 18px;
-    animation: floatUp 3s ease-out forwards;
-    opacity: 0;
-  }
-  @keyframes floatUp {
-    0% { opacity: 0.9; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-120px) scale(0.6); }
-  }
+/* ─── REVEAL ──────────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(.4,0,.2,1),
+              transform 0.65s cubic-bezier(.4,0,.2,1);
+}
+[data-reveal].vis {
+  opacity: 1;
+  transform: none;
+}
 
-  /* ANIMATIONS */
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+/* ─── LETTER ──────────────────────────────────────────── */
+#letter {
+  background: var(--bg-2);
+}
+.letter-inner {
+  width: 100%;
+  max-width: 820px;
+}
+.letter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--r20);
+  overflow: hidden;
+}
+.lcard {
+  background: var(--bg-3);
+  padding: 2.25rem;
+  transition: background 0.2s;
+}
+.lcard:hover { background: #161616; }
+.lcard:nth-child(1) { border-radius: calc(var(--r20) - 1px) 0 0 0; }
+.lcard:nth-child(2) { border-radius: 0 calc(var(--r20) - 1px) 0 0; }
+.lcard:nth-child(3) { border-radius: 0 0 0 calc(var(--r20) - 1px); }
+.lcard:nth-child(4) { border-radius: 0 0 calc(var(--r20) - 1px) 0; }
 
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    nav ul { gap: 1.25rem; }
-    nav a { font-size: 12px; }
-    .letters-grid { grid-template-columns: 1fr; }
-    .letter-card:nth-child(1) { border-radius: 20px 20px 0 0; }
-    .letter-card:nth-child(2) { border-radius: 0; }
-    .letter-card:nth-child(3) { border-radius: 0; }
-    .letter-card:nth-child(4) { border-radius: 0 0 20px 20px; }
-    section { padding: 72px 1.25rem 3rem; }
-    #letter { padding: 72px 1.25rem 3rem; }
-  }
+.lcard-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px 4px 8px;
+  border-radius: 100px;
+  margin-bottom: 1.2rem;
+  border: 0.5px solid currentColor;
+}
+.lcard-tag svg { width: 11px; height: 11px; }
+.lcard:nth-child(1) .lcard-tag { color: var(--rose);   background: rgba(255,55,95,.08); }
+.lcard:nth-child(2) .lcard-tag { color: var(--violet); background: rgba(191,90,242,.08); }
+.lcard:nth-child(3) .lcard-tag { color: var(--teal);   background: rgba(48,213,200,.08); }
+.lcard:nth-child(4) .lcard-tag { color: var(--amber);  background: rgba(255,214,10,.08); }
+
+.lcard h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.lcard p {
+  font-size: 14px;
+  line-height: 1.78;
+  color: var(--text-2);
+  font-weight: 300;
+}
+
+/* ─── MUSIC ───────────────────────────────────────────── */
+#music {
+  background: var(--bg);
+  text-align: center;
+}
+.music-frame-wrap {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 2rem;
+  border-radius: var(--r20);
+  overflow: hidden;
+  border: 0.5px solid var(--border-hi);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+}
+.music-frame-wrap iframe {
+  width: 100%;
+  display: block;
+  border: none;
+}
+
+/* ─── LOVE METER ──────────────────────────────────────── */
+#interactive {
+  background: var(--bg-2);
+}
+.meter-shell {
+  width: 100%;
+  max-width: 480px;
+  margin-top: 2rem;
+  background: var(--bg-3);
+  border: 0.5px solid var(--border-hi);
+  border-radius: var(--r24);
+  padding: 2.75rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+.meter-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+}
+.meter-title {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 2rem;
+}
+
+/* Custom range track + thumb */
+.range-wrap {
+  position: relative;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.range-track-bg {
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  background: #2c2c2e;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.range-track-fill {
+  position: absolute;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--rose), var(--violet));
+  border-radius: 2px;
+  pointer-events: none;
+  width: 50%;
+  transition: width 0.05s;
+}
+input[type=range]#loveslider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  z-index: 1;
+}
+input[type=range]#loveslider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(255,55,95,.5), 0 0 0 0 rgba(255,55,95,0.3);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+input[type=range]#loveslider:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+  box-shadow: 0 2px 20px rgba(255,55,95,.65), 0 0 0 8px rgba(255,55,95,0.12);
+}
+input[type=range]#loveslider::-moz-range-thumb {
+  width: 26px; height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(255,55,95,.5);
+  cursor: pointer;
+}
+.meter-big-val {
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--rose), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 1.5rem 0 0.6rem;
+  min-height: 72px;
+  line-height: 1;
+  transition: all 0.2s;
+}
+.meter-big-val.gold {
+  background: linear-gradient(135deg, var(--amber), #ff9500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.meter-msg {
+  font-size: 15px;
+  color: var(--text-3);
+  font-weight: 300;
+  min-height: 22px;
+  letter-spacing: 0.01em;
+  transition: color 0.3s;
+}
+
+/* ─── ENVELOPE / MESSAGE ──────────────────────────────── */
+#envelope {
+  background: var(--bg);
+  text-align: center;
+}
+.envelope-stage {
+  margin-top: 3rem;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.env-btn {
+  width: 200px;
+  height: 148px;
+  border-radius: var(--r20);
+  background: var(--bg-3);
+  border: 0.5px solid var(--border-hi);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: transform 0.25s cubic-bezier(.4,0,.2,1),
+              border-color 0.25s,
+              box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.env-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255,55,95,0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.env-btn:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,55,95,0.4);
+  box-shadow: 0 20px 60px rgba(255,55,95,0.15);
+}
+.env-btn:hover::before { opacity: 1; }
+.env-btn:active { transform: translateY(-1px) scale(0.98); }
+.env-icon-wrap { transition: transform 0.35s cubic-bezier(.4,0,.2,1); }
+.env-btn.opened .env-icon-wrap { transform: scale(0.85) rotate(-8deg); }
+.env-btn svg { display: block; }
+.env-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-top: 1rem;
+  transition: color 0.3s;
+}
+.env-label.opened { color: var(--rose); }
+
+/* Reveal card */
+.msg-card {
+  position: absolute;
+  bottom: calc(100% + 1.25rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  width: clamp(290px, 88vw, 360px);
+  background: #161616;
+  border: 0.5px solid rgba(255,55,95,0.28);
+  border-radius: var(--r20);
+  padding: 2rem;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s cubic-bezier(.4,0,.2,1),
+              transform 0.45s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 32px 80px rgba(255,55,95,0.1),
+              0 0 0 0.5px rgba(255,55,95,0.1);
+}
+.msg-card.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.msg-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.msg-card-head svg { color: var(--rose); flex-shrink: 0; }
+.msg-card-head h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--rose);
+}
+.msg-card p {
+  font-size: 14px;
+  line-height: 1.72;
+  color: var(--text-2);
+  font-weight: 300;
+  margin-bottom: 0.8rem;
+}
+.msg-card p:last-child { margin-bottom: 0; }
+.msg-sig {
+  font-size: 13px;
+  color: var(--text-3);
+  font-style: italic;
+  margin-top: 0.5rem !important;
+}
+
+/* ─── FLOATING PARTICLES ──────────────────────────────── */
+.particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  animation: floatUp 2.8s cubic-bezier(.2,.8,.4,1) forwards;
+  will-change: transform, opacity;
+}
+@keyframes floatUp {
+  0%   { opacity: 0.9; transform: translateY(0)    scale(1)    rotate(0deg); }
+  100% { opacity: 0;   transform: translateY(-140px) scale(0.5) rotate(20deg); }
+}
+
+/* ─── ANIMATIONS ──────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 680px) {
+  nav ul { gap: 0; }
+  nav a  { padding: 0 0.7rem; font-size: 12px; }
+  .letter-grid { grid-template-columns: 1fr; }
+  .lcard:nth-child(1) { border-radius: calc(var(--r20)-1px) calc(var(--r20)-1px) 0 0; }
+  .lcard:nth-child(2),
+  .lcard:nth-child(3) { border-radius: 0; }
+  .lcard:nth-child(4) { border-radius: 0 0 calc(var(--r20)-1px) calc(var(--r20)-1px); }
+  .meter-big-val { font-size: 52px; }
+  .meter-shell { padding: 2rem 1.5rem; }
+  .section { padding: calc(var(--nav-h) + 2rem) 1.25rem 3rem; }
+}
+
+@media (max-width: 420px) {
+  nav a { display: none; }
+  nav a:nth-child(-n+3) { display: block; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
 
+<!-- Scroll progress -->
+<div id="progress-bar"></div>
+
+<!-- NAV -->
 <nav id="nav">
   <ul>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#letter">Letter</a></li>
-    <li><a href="#music">Music</a></li>
-    <li><a href="#interactive">Love meter</a></li>
-    <li><a href="#envelope">Message</a></li>
+    <li><a href="#home"        class="nav-link">Home</a></li>
+    <li><a href="#letter"      class="nav-link">Love Letter</a></li>
+    <li><a href="#music"       class="nav-link">Music</a></li>
+    <li><a href="#interactive" class="nav-link">Love Meter</a></li>
+    <li><a href="#envelope"    class="nav-link">Special Message</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
-<section id="home">
-  <div class="glow glow-1"></div>
-  <div class="glow glow-2"></div>
-  <p class="hero-eyebrow">05 July 2025</p>
-  <h1 class="hero-title">Happy Birthday,<br>My Love.</h1>
+<!-- ── HERO ──────────────────────────────────────────── -->
+<section class="section" id="home">
+  <div class="glow hero-glow-a"></div>
+  <div class="glow hero-glow-b"></div>
+
+  <p class="hero-kicker">2025 &nbsp;·&nbsp; 07 &nbsp;·&nbsp; 05</p>
+
+  <h1 class="hero-h1">Happy Birthday,<br>My Love.</h1>
+
   <p class="hero-date">Another year more beautiful than the last.</p>
 
-  <!-- Replace src with your image path, e.g. images/front.jpg -->
-  <!-- If you have the image, use: <img src="images/front.jpg" alt="Us" class="hero-photo"> -->
-  <img src="images/front.jpg" alt="Us" class="hero-photo">
+  <!-- Photo with spinning gradient ring -->
+  <div class="photo-ring">
+    <img
+      src="images/front.jpg"
+      alt=""
+      class="hero-photo"
+      onerror="this.style.display='none';document.getElementById('pfallback').style.display='flex';"
+    >
+    <div class="hero-photo-fallback" id="pfallback">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    </div>
+  </div>
 
-  <p class="hero-quote">"Every day with you is a gift — but today is extra special. You make my world complete."</p>
+  <p class="hero-quote">"Every single day with you feels like something I never want to take for granted. But today, on your birthday, I just want you to know how grateful I am that you exist."</p>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <div class="scroll-mouse"></div>
+    <span>Scroll</span>
+  </div>
 </section>
 
-<!-- LOVE LETTER -->
-<section id="letter">
-  <div style="width:100%;max-width:800px;text-align:left;">
-    <span class="section-label">A letter for you</span>
-    <h2 class="section-title">Written from the heart.</h2>
-    <div class="letters-grid">
-      <div class="letter-card" data-reveal>
-        <h3>How we met</h3>
-        <p>From the moment I first saw you at Uni, the universe conspired to bring us together. Your smile, your laugh — everything about you captured my heart instantly. That chance encounter changed my life forever.</p>
+<!-- ── LOVE LETTER ────────────────────────────────────── -->
+<section class="section" id="letter">
+  <div class="letter-inner">
+    <div class="sec-kicker" data-reveal>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      A letter for you
+    </div>
+    <h2 class="sec-h2" data-reveal style="transition-delay:0.08s">My Love Letter to You.</h2>
+    <div class="divider" data-reveal style="transition-delay:0.14s"></div>
+
+    <div class="letter-grid">
+
+      <div class="lcard" data-reveal style="transition-delay:0.1s">
+        <div class="lcard-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          How We Met
+        </div>
+        <h3>That first moment.</h3>
+        <p>I still think about the first time I saw you at uni. I don't think you knew it then, but something shifted in me that day. The way you carried yourself, the way you laughed — I couldn't stop thinking about you after that. I didn't know it at the time, but that was the moment everything changed.</p>
       </div>
-      <div class="letter-card" data-reveal>
-        <h3>Our best memories</h3>
-        <p>From our first time at KFC to every midnight call, every burst of laughter — I smile every time I get even a glimpse of you. Those moments are ones I'll carry with me always.</p>
+
+      <div class="lcard" data-reveal style="transition-delay:0.18s">
+        <div class="lcard-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Our Best Memories
+        </div>
+        <h3>Moments I carry.</h3>
+        <p>From that first time at KFC to every little moment in between, you've had me smiling in a way I can't quite explain. Even when we couldn't see each other, those late night calls meant everything to me. Just talking to you, laughing about nothing, feeling completely understood — I didn't know it could feel like that with someone.</p>
       </div>
-      <div class="letter-card" data-reveal>
-        <h3>What I love most</h3>
-        <p>Your kindness, your strength through everything life's thrown at you, your beautiful soul. You've been my safe place since the day I got to know you. You're not just my girlfriend — you're my best friend, my soulmate, my everything.</p>
+
+      <div class="lcard" data-reveal style="transition-delay:0.26s">
+        <div class="lcard-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          What I Love Most
+        </div>
+        <h3>Your quiet strength.</h3>
+        <p>You became my safe place without even trying. Around you, I never have to pretend to be anything other than what I am. I love how much you care for the people around you, even when things at home are hard. I love your quiet strength, the way you keep going even when it's not easy. You're not just my girlfriend. You're the person I want to talk to at the end of every day.</p>
       </div>
-      <div class="letter-card" data-reveal>
-        <h3>My promise to you</h3>
-        <p>I promise to love you more every single day — to be your biggest supporter, your shoulder to cry on, and your partner in every adventure life brings. You deserve all the happiness in this world.</p>
+
+      <div class="lcard" data-reveal style="transition-delay:0.34s">
+        <div class="lcard-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          My Promise
+        </div>
+        <h3>Every day after this one.</h3>
+        <p>I'm not great with grand gestures, but I mean every word of this. I'll be here — through the good days and the hard ones. I'll cheer you on, be honest with you, and make sure you never have to wonder if you're loved. You deserve that kind of love, and I'm going to spend a long time making sure you have it.</p>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- MUSIC -->
-<section id="music">
-  <span class="section-label">A song for you</span>
-  <h2 class="section-title" style="text-align:center;">This reminds me of you.</h2>
-  <div class="music-wrap">
-    <iframe src="https://open.spotify.com/embed/track/47Slg6LuqLaX0VodpSCvPt?utm_source=generator"
-      height="352" frameborder="0"
+<!-- ── MUSIC ──────────────────────────────────────────── -->
+<section class="section" id="music">
+  <div class="glow" style="width:400px;height:400px;background:radial-gradient(circle,rgba(191,90,242,0.15) 0%,transparent 70%);top:-80px;right:-80px;"></div>
+
+  <div class="sec-kicker" data-reveal style="justify-content:center">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    A song for you
+  </div>
+  <h2 class="sec-h2" data-reveal style="text-align:center;transition-delay:0.08s">This makes me think of you.</h2>
+  <div class="divider" data-reveal style="margin-left:auto;margin-right:auto;transition-delay:0.14s"></div>
+
+  <div class="music-frame-wrap" data-reveal style="transition-delay:0.2s">
+    <iframe
+      src="https://open.spotify.com/embed/track/47Slg6LuqLaX0VodpSCvPt?utm_source=generator&theme=0"
+      height="352"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"></iframe>
+      loading="lazy">
+    </iframe>
   </div>
 </section>
 
-<!-- LOVE METER -->
-<section id="interactive">
-  <span class="section-label">Just for fun</span>
-  <h2 class="section-title" style="text-align:center;">The love meter.</h2>
-  <div class="meter-card">
-    <h3>How much do you love me?</h3>
-    <div class="slider-row">
-      <div class="slider-label"><span>A little</span><span>Infinity</span></div>
-      <input type="range" min="0" max="100" value="50" id="loveslider" step="1">
+<!-- ── LOVE METER ─────────────────────────────────────── -->
+<section class="section" id="interactive">
+  <div class="sec-kicker" data-reveal style="justify-content:center">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    Just for fun
+  </div>
+  <h2 class="sec-h2" data-reveal style="text-align:center;transition-delay:0.08s">The Love Meter.</h2>
+  <div class="divider" data-reveal style="margin-left:auto;margin-right:auto;transition-delay:0.14s"></div>
+
+  <div class="meter-shell" data-reveal style="transition-delay:0.2s">
+    <p class="meter-title">So, how much do you love me?</p>
+    <div class="meter-label-row">
+      <span>A little</span>
+      <span>Infinitely</span>
     </div>
-    <span class="slider-val" id="loveval">50%</span>
-    <p class="love-msg" id="lovemsg">Slide to show me...</p>
+    <div class="range-wrap">
+      <div class="range-track-bg"></div>
+      <div class="range-track-fill" id="trackfill"></div>
+      <input type="range" min="0" max="100" value="50" id="loveslider" step="1" aria-label="Love percentage">
+    </div>
+    <div class="meter-big-val" id="loveval">50%</div>
+    <p class="meter-msg" id="lovemsg">Slide to show me...</p>
   </div>
 </section>
 
-<!-- SPECIAL MESSAGE -->
-<section id="envelope">
-  <span class="section-label">Open me</span>
-  <h2 class="section-title">A special message.</h2>
-  <p style="color:var(--muted);font-size:15px;font-weight:300;">Tap the envelope when you're ready.</p>
-  <div class="envelope-wrap">
-    <div class="msg-card" id="msgcard">
-      <h3>💝 Happy Birthday, my love!</h3>
-      <p>You are the most amazing person I've ever known. Thank you for being you, for loving me, and for making every single day feel like a celebration.</p>
-      <p>I can't wait to spend many more birthdays with you — laughing, growing, and loving each other more than the day before.</p>
-      <p class="sig">Forever yours, with all my love ❤️</p>
+<!-- ── SPECIAL MESSAGE ────────────────────────────────── -->
+<section class="section" id="envelope">
+  <div class="glow" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,55,95,0.12) 0%,transparent 70%);bottom:-120px;left:-80px;"></div>
+
+  <div class="sec-kicker" data-reveal style="justify-content:center">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    Open me
+  </div>
+  <h2 class="sec-h2" data-reveal style="text-align:center;transition-delay:0.08s">A special message.</h2>
+  <div class="divider" data-reveal style="margin-left:auto;margin-right:auto;transition-delay:0.14s"></div>
+  <p class="sec-sub" data-reveal style="color:var(--text-3);font-size:15px;font-weight:300;transition-delay:0.2s">Click the envelope when you're ready.</p>
+
+  <div class="envelope-stage" data-reveal style="transition-delay:0.28s">
+    <!-- Message card -->
+    <div class="msg-card" id="msgcard" role="region" aria-label="Special birthday message" aria-live="polite">
+      <div class="msg-card-head">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h3>Happy Birthday, my love.</h3>
+      </div>
+      <p>There's no one quite like you. Thank you for letting me be part of your life, for being so easy to love, and for making ordinary days feel like something worth remembering.</p>
+      <p>Here's to you, today and every day after.</p>
+      <p class="msg-sig">Yours, always.</p>
     </div>
+
+    <!-- Envelope button -->
     <button class="env-btn" id="envbtn" onclick="openEnvelope()" aria-label="Open envelope">
-      <span class="env-icon" id="envicon">💌</span>
+      <div class="env-icon-wrap" id="envicon">
+        <svg id="icon-closed" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff375f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <svg id="icon-open" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bf5af2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
     </button>
-    <p class="env-hint" id="envhint">tap to open</p>
+    <p class="env-label" id="envlabel">tap to open</p>
   </div>
 </section>
 
+<!-- ────────────────────────────────────────────────────── -->
 <script>
-  // Nav hide on scroll down
-  let lastY = 0;
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    nav.classList.toggle('hide', y > lastY + 4 && y > 60);
-    if (y < lastY - 4 || y < 60) nav.classList.remove('hide');
-    lastY = y;
-  }, { passive: true });
+/* ── Scroll: progress bar + nav active + hide ────── */
+const progressBar = document.getElementById('progress-bar');
+const navEl       = document.getElementById('nav');
+const navLinks    = document.querySelectorAll('.nav-link');
+const sections    = document.querySelectorAll('.section');
+let lastY = 0, ticking = false;
 
-  // Reveal letter cards
-  const cards = document.querySelectorAll('[data-reveal]');
-  const ro = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('vis'), i * 120);
-        ro.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  cards.forEach(c => ro.observe(c));
+function onScroll() {
+  const y   = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
 
-  // Love meter
-  const slider = document.getElementById('loveslider');
-  const val = document.getElementById('loveval');
-  const msg = document.getElementById('lovemsg');
-  const msgs = [
-    [0,  24, "Come on, you can do better! 😅"],
-    [25, 49, "Hmm... I know it's more than that. 🥺"],
-    [50, 74, "That's sweet — but I think there's room for more 💕"],
-    [75, 99, "Now we're talking! You're incredible 💖"],
-    [100,100,"INFINITE LOVE! That's the one 💕💕💕"],
-  ];
-  slider.addEventListener('input', function() {
-    const v = +this.value;
-    val.textContent = v + '%';
-    val.style.color = v === 100 ? '#ffd60a' : 'var(--accent)';
-    const found = msgs.find(m => v >= m[0] && v <= m[1]);
-    msg.textContent = found ? found[2] : '';
-    spawnHeart();
+  // Nav hide/show
+  if (y > lastY + 6 && y > 80) navEl.classList.add('hide');
+  else if (y < lastY - 6 || y < 80) navEl.classList.remove('hide');
+  navEl.classList.toggle('scrolled', y > 20);
+  lastY = y;
+
+  // Active nav link
+  let current = '';
+  sections.forEach(s => {
+    if (y >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
   });
 
-  // Envelope
-  let opened = false;
-  function openEnvelope() {
-    if (opened) return;
-    opened = true;
-    document.getElementById('envbtn').classList.add('opened');
-    document.getElementById('envicon').textContent = '💝';
-    document.getElementById('envhint').textContent = '✨';
-    document.getElementById('msgcard').classList.add('show');
-    for (let i = 0; i < 8; i++) setTimeout(spawnHeart, i * 150);
-  }
+  ticking = false;
+}
+window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
 
-  // Hearts
-  function spawnHeart() {
-    const h = document.createElement('div');
-    h.className = 'heart';
-    h.textContent = ['❤️','💕','💖','💝'][Math.floor(Math.random()*4)];
-    h.style.left = Math.random() * 90 + 5 + 'vw';
-    h.style.top = Math.random() * 70 + 10 + 'vh';
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 3100);
-  }
-  setInterval(() => { if (Math.random() > 0.6) spawnHeart(); }, 4000);
-
-  // Smooth nav clicks
-  document.querySelectorAll('nav a').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
-    });
+/* ── Smooth nav clicks ───────────────────────────── */
+navLinks.forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      navEl.classList.remove('hide');
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   });
+});
+
+/* ── Reveal on scroll ────────────────────────────── */
+const revealItems = document.querySelectorAll('[data-reveal]');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealItems.forEach(el => revealObs.observe(el));
+
+/* ── Floating particles (declared first — used by meter + envelope) ── */
+const pShapes = [
+  '<svg width="18" height="18" viewBox="0 0 24 24" fill="#ff375f"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  '<svg width="14" height="14" viewBox="0 0 24 24" fill="#bf5af2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  '<svg width="12" height="12" viewBox="0 0 24 24" fill="#ffd60a"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  '<svg width="10" height="10" viewBox="0 0 24 24" fill="#30d5c8"><circle cx="12" cy="12" r="10"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff375f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+];
+function spawnParticle() {
+  const p = document.createElement('div');
+  p.className  = 'particle';
+  p.innerHTML  = pShapes[Math.floor(Math.random() * pShapes.length)];
+  p.style.left = (Math.random() * 88 + 6) + 'vw';
+  p.style.top  = (Math.random() * 65 + 15) + 'vh';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 2900);
+}
+setInterval(() => { if (Math.random() > 0.65) spawnParticle(); }, 3800);
+
+/* ── Love meter ──────────────────────────────────── */
+const slider    = document.getElementById('loveslider');
+const fillEl    = document.getElementById('trackfill');
+const valEl     = document.getElementById('loveval');
+const msgEl     = document.getElementById('lovemsg');
+const meterMsgs = [
+  [0,   24,  "Come on, I know it's more than that."],
+  [25,  49,  "You're holding back, I can tell."],
+  [50,  74,  "Now we're getting somewhere."],
+  [75,  99,  "That's more like it."],
+  [100, 100, "That's all I needed to hear."],
+];
+
+function updateMeter() {
+  const v = +slider.value;
+  fillEl.style.width = v + '%';
+  valEl.textContent  = v + '%';
+  valEl.classList.toggle('gold', v === 100);
+  const found = meterMsgs.find(m => v >= m[0] && v <= m[1]);
+  msgEl.textContent = found ? found[2] : '';
+  if (Math.random() > 0.55) spawnParticle();
+}
+slider.addEventListener('input', updateMeter);
+updateMeter(); // init
+
+/* ── Envelope ────────────────────────────────────── */
+let opened = false;
+function openEnvelope() {
+  if (opened) return;
+  opened = true;
+  document.getElementById('envbtn').classList.add('opened');
+  document.getElementById('icon-closed').style.display = 'none';
+  document.getElementById('icon-open').style.display   = 'block';
+  const lbl = document.getElementById('envlabel');
+  lbl.textContent = 'with love';
+  lbl.classList.add('opened');
+  document.getElementById('msgcard').classList.add('show');
+  for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 110);
+}
 </script>
 </body>
 </html>
