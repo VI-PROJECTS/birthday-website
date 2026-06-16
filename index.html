@@ -1,908 +1,563 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday ❤️</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #322e2e 100%);
-            color: #333;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(194, 108, 149, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 0.8rem 0;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav.hidden {
-            transform: translateY(-100%);
-        }
-
-        .nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 2.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: #000000;
-            font-weight: 600;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 0.95rem;
-        }
-
-        .nav a:hover {
-            color: #860e36;
-            background: rgba(233, 30, 99, 0.1);
-        }
-
-        /* Sections */
-        section {
-            min-height: 100vh;
-            padding: 100px 2rem 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Landing Section */
-        .landing {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 120px 2rem 4rem;
-        }
-
-        .landing h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease forwards;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            line-height: 1.2;
-        }
-
-        .couple-img {
-            width: clamp(200px, 25vw, 320px);
-            height: clamp(200px, 25vw, 320px);
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 2.5rem 0;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 0.5s forwards;
-            border: 6px solid white;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .personal-quote {
-            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-            font-style: italic;
-            max-width: 700px;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 1s forwards;
-            padding: 0 1rem;
-            line-height: 1.7;
-        }
-
-        .birthday-date {
-            font-size: clamp(0.9rem, 2vw, 1.1rem);
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: -2rem;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 0.8s forwards;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-        
-        /* Love Letter Section */
-        .love-letter {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 100px 2rem 4rem;
-        }
-
-        .love-letter h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .letter-container {
-            max-width: 900px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: clamp(2rem, 4vw, 4rem);
-            margin: 2rem auto;
-            max-height: 75vh;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .letter-container::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        .letter-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-        }
-
-        .letter-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 6px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .letter-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        .letter-section {
-            margin-bottom: 3.5rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .letter-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .letter-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .letter-section h3 {
-            font-size: clamp(1.5rem, 3vw, 2.2rem);
-            margin-bottom: 2rem;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            font-weight: 600;
-        }
-
-        .letter-section p {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            line-height: 1.8;
-            text-align: left;
-            color: rgba(255, 255, 255, 0.95);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Music Section */
-        .music-section {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 100px 2rem 4rem;
-        }
-
-        .music-section h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .music-player {
-            width: 100%;
-            max-width: 600px;
-            height: clamp(280px, 50vw, 400px);
-            border-radius: 15px;
-            border: 4px solid white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Interactive Section */
-        .interactive {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
-            padding: 100px 2rem 4rem;
-        }
-
-        .interactive h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .love-meter {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: clamp(2.5rem, 5vw, 4rem);
-            margin: 2rem auto;
-            max-width: 700px;
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .love-meter h3 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            margin-bottom: 2.5rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .slider-container {
-            margin: 3rem 0;
-            text-align: center;
-        }
-
-        .slider-container p {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            margin: 1.5rem 0;
-        }
-
-        .love-slider {
-            width: 100%;
-            max-width: 500px;
-            height: 18px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            outline: none;
-            -webkit-appearance: none;
-            margin: 1.5rem 0;
-        }
-
-        .love-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #e91e63;
-            cursor: pointer;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .love-slider::-moz-range-thumb {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #e91e63;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .love-response {
-            font-size: clamp(1.3rem, 3vw, 1.8rem);
-            margin-top: 2.5rem;
-            min-height: 100px;
-            opacity: 0;
-            transition: opacity 0.5s;
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .love-response.show {
-            opacity: 1;
-        }
-
-        /* Envelope Section */
-        .envelope-section {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-            padding: 100px 2rem 4rem;
-        }
-
-        .envelope-section h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .envelope-section p {
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .envelope {
-            width: clamp(180px, 20vw, 220px);
-            height: clamp(135px, 15vw, 165px);
-            background: #e91e63;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.5s ease;
-            margin: 3rem auto;
-            border-radius: 12px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .envelope:hover {
-            transform: scale(1.05);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
-        }
-
-        .envelope.open {
-            transform: scale(1.1);
-        }
-
-        .envelope::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, #e91e63, #ff4081);
-            clip-path: polygon(0 50%, 50% 0, 100% 50%, 100% 100%, 0 100%);
-            transition: clip-path 0.6s ease;
-            border-radius: 12px;
-        }
-
-        .envelope.open::before {
-            clip-path: polygon(0 0, 50% 0, 100% 0, 100% 100%, 0 100%);
-        }
-
-        .envelope::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #ff4081;
-            clip-path: polygon(0 50%, 50% 100%, 100% 50%, 100% 100%, 0 100%);
-            transition: clip-path 0.6s ease;
-            border-radius: 12px;
-        }
-
-        .envelope.open::after {
-            clip-path: polygon(0 100%, 50% 100%, 100% 100%, 100% 100%, 0 100%);
-        }
-
-        .letter-inside {
-            position: absolute;
-            top: -30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            transition: all 0.8s ease;
-            pointer-events: none;
-            max-width: clamp(280px, 35vw, 380px);
-            width: clamp(280px, 35vw, 380px);
-            text-align: center;
-            z-index: 10;
-            border: 4px solid #e91e63;
-            line-height: 1;
-        }
-
-        .envelope.open .letter-inside {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .letter-inside h3 {
-            color: #e91e63;
-            margin-bottom: 1.5rem;
-            font-size: clamp(1.2rem, 3vw, 1.6rem);
-            font-weight: 700;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .letter-inside p {
-            color: #333;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-            margin-top: -0.5rem;
-            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
-            text-align: center;
-            padding: 0 0.5rem;
-        }
-
-        .letter-inside .signature {
-            margin-top: 1.5rem;
-            font-weight: bold;
-            color: #e91e63;
-            font-style: italic;
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes heartbeat {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        .heartbeat {
-            animation: heartbeat 1s infinite;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav ul {
-                gap: 1.5rem;
-                flex-wrap: wrap;
-                padding: 0 1rem;
-            }
-
-            .nav a {
-                font-size: 0.9rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            section {
-                padding: 90px 1.5rem 2rem;
-            }
-
-            .landing {
-                padding: 100px 1.5rem 3rem;
-            }
-
-            .love-letter {
-                padding: 90px 1.5rem 3rem;
-            }
-
-            .music-section {
-                padding: 90px 1.5rem 3rem;
-            }
-
-            .interactive {
-                padding: 90px 1.5rem 3rem;
-            }
-
-            .envelope-section {
-                padding: 90px 1.5rem 3rem;
-            }
-
-            .letter-container {
-                padding: 2rem;
-                margin: 1.5rem auto;
-            }
-
-            .letter-section {
-                padding: 1.5rem;
-                margin-bottom: 2.5rem;
-            }
-
-            .love-meter {
-                padding: 2rem;
-                margin: 1.5rem auto;
-            }
-
-            .envelope {
-                margin: 2rem auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav ul {
-                gap: 1rem;
-                padding: 0 0.5rem;
-            }
-
-            .nav a {
-                font-size: 0.85rem;
-                padding: 0.3rem 0.6rem;
-            }
-
-            section {
-                padding: 80px 1rem 1.5rem;
-            }
-
-            .landing {
-                padding: 90px 1rem 2rem;
-            }
-
-            .love-letter {
-                padding: 80px 1rem 2rem;
-            }
-
-            .music-section {
-                padding: 80px 1rem 2rem;
-            }
-
-            .interactive {
-                padding: 80px 1rem 2rem;
-            }
-
-            .envelope-section {
-                padding: 80px 1rem 2rem;
-            }
-
-            .letter-container {
-                padding: 1.5rem;
-                margin: 1rem auto;
-            }
-
-            .letter-section {
-                padding: 1.2rem;
-                margin-bottom: 2rem;
-            }
-
-            .love-meter {
-                padding: 1.5rem;
-                margin: 1rem auto;
-            }
-
-            .envelope {
-                margin: 1.5rem auto;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .nav ul {
-                gap: 3rem;
-            }
-
-            .nav a {
-                font-size: 1rem;
-                padding: 0.6rem 1.2rem;
-            }
-
-            section {
-                padding: 120px 3rem 4rem;
-            }
-
-            .landing {
-                padding: 140px 3rem 5rem;
-            }
-
-            .love-letter {
-                padding: 120px 3rem 4rem;
-            }
-
-            .music-section {
-                padding: 120px 3rem 4rem;
-            }
-
-            .interactive {
-                padding: 120px 3rem 4rem;
-            }
-
-            .envelope-section {
-                padding: 120px 3rem 4rem;
-            }
-
-            .letter-container {
-                padding: 4rem;
-                margin: 3rem auto;
-            }
-
-            .letter-section {
-                padding: 2.5rem;
-                margin-bottom: 4rem;
-            }
-
-            .love-meter {
-                padding: 4rem;
-                margin: 3rem auto;
-            }
-
-            .envelope {
-                margin: 4rem auto;
-            }
-        }
-
-        /* Touch-friendly improvements */
-        @media (hover: none) and (pointer: coarse) {
-            .nav a {
-                padding: 0.8rem 1.2rem;
-                min-height: 48px;
-                display: flex;
-                align-items: center;
-            }
-
-            .love-slider {
-                height: 22px;
-            }
-
-            .love-slider::-webkit-slider-thumb {
-                width: 40px;
-                height: 40px;
-            }
-
-            .love-slider::-moz-range-thumb {
-                width: 40px;
-                height: 40px;
-            }
-
-            .envelope {
-                min-height: 80px;
-                min-width: 120px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+<style>
+  :root {
+    --bg: #000;
+    --surface: #0a0a0a;
+    --card: #111;
+    --border: rgba(255,255,255,0.08);
+    --text: #f5f5f7;
+    --muted: #86868b;
+    --accent: #ff375f;
+    --accent2: #bf5af2;
+    --pink-soft: rgba(255,55,95,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 0 2rem;
+    height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid var(--border);
+    transition: transform 0.3s ease;
+  }
+  nav.hide { transform: translateY(-100%); }
+  nav ul { display: flex; gap: 2rem; list-style: none; }
+  nav a {
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: #fff; }
+
+  /* SECTIONS */
+  section {
+    scroll-snap-align: start;
+    min-height: 100svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 80px 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* HERO */
+  #home {
+    background: var(--bg);
+    text-align: center;
+    gap: 0;
+  }
+  .hero-eyebrow {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: rise 1s ease 0.2s forwards;
+  }
+  .hero-title {
+    font-size: clamp(2.8rem, 8vw, 6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 30%, #ff375f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    animation: rise 1s ease 0.4s forwards;
+    margin-bottom: 0.5rem;
+  }
+  .hero-date {
+    font-size: 17px;
+    color: var(--muted);
+    font-weight: 300;
+    opacity: 0;
+    animation: rise 1s ease 0.55s forwards;
+    margin-bottom: 2.5rem;
+  }
+  .hero-photo {
+    width: clamp(160px, 22vw, 260px);
+    height: clamp(160px, 22vw, 260px);
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    opacity: 0;
+    animation: rise 1s ease 0.7s forwards;
+    margin-bottom: 2.5rem;
+    display: block;
+  }
+  /* Fallback circle when no image */
+  .hero-photo-fallback {
+    width: clamp(160px, 22vw, 260px);
+    height: clamp(160px, 22vw, 260px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(3rem, 8vw, 5rem);
+    opacity: 0;
+    animation: rise 1s ease 0.7s forwards;
+    margin-bottom: 2.5rem;
+  }
+  .hero-quote {
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    max-width: 580px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: rise 1s ease 0.9s forwards;
+  }
+
+  /* Ambient glow */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .glow-1 { width: 500px; height: 500px; background: #ff375f; top: -100px; left: -100px; }
+  .glow-2 { width: 400px; height: 400px; background: #bf5af2; bottom: -80px; right: -80px; }
+
+  /* LETTER */
+  #letter {
+    background: var(--surface);
+    align-items: stretch;
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 3rem;
+  }
+  .section-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 3rem;
+  }
+  .letters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .letter-card {
+    background: var(--card);
+    padding: 2rem 2.25rem;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .letter-card.vis { opacity: 1; transform: none; }
+  .letter-card:nth-child(1) { border-radius: 20px 0 0 0; }
+  .letter-card:nth-child(2) { border-radius: 0 20px 0 0; }
+  .letter-card:nth-child(3) { border-radius: 0 0 0 20px; }
+  .letter-card:nth-child(4) { border-radius: 0 0 20px 0; }
+  .letter-card h3 {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .letter-card p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.72);
+    font-weight: 300;
+  }
+  .letter-card:nth-child(2) h3 { color: var(--accent2); }
+  .letter-card:nth-child(3) h3 { color: #2cd9c5; }
+  .letter-card:nth-child(4) h3 { color: #ffd60a; }
+
+  /* MUSIC */
+  #music {
+    background: var(--bg);
+    text-align: center;
+  }
+  .music-wrap {
+    width: 100%;
+    max-width: 540px;
+    margin-top: 2rem;
+  }
+  .music-wrap iframe {
+    width: 100%;
+    border-radius: 16px;
+    border: none;
+    display: block;
+  }
+
+  /* LOVE METER */
+  #interactive {
+    background: var(--surface);
+  }
+  .meter-card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .meter-card h3 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+  .slider-row { margin-bottom: 1rem; }
+  .slider-label {
+    font-size: 13px; color: var(--muted);
+    display: flex; justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%; height: 4px;
+    background: #2c2c2e;
+    border-radius: 2px;
+    outline: none;
+    margin-bottom: 0.5rem;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,55,95,0.5);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+  }
+  .slider-val {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    margin: 1.25rem 0 0.75rem;
+    min-height: 56px;
+    display: block;
+  }
+  .love-msg {
+    font-size: 15px;
+    color: var(--muted);
+    min-height: 24px;
+    transition: color 0.3s;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* ENVELOPE */
+  #envelope {
+    background: var(--bg);
+    text-align: center;
+  }
+  .envelope-wrap {
+    margin-top: 3rem;
+    position: relative;
+    display: inline-block;
+  }
+  .env-btn {
+    width: 220px; height: 160px;
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
+    transition: transform 0.3s ease, border-color 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .env-btn:hover { transform: scale(1.03); border-color: rgba(255,55,95,0.5); }
+  .env-icon { font-size: 52px; transition: transform 0.3s; pointer-events: none; }
+  .env-btn.opened .env-icon { transform: scale(0.8) rotate(-10deg); }
+  .env-hint {
+    font-size: 12px; color: var(--muted);
+    margin-top: 1.25rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Message card pops up */
+  .msg-card {
+    position: absolute;
+    bottom: calc(100% + 1.5rem);
+    left: 50%; transform: translateX(-50%) translateY(10px);
+    width: clamp(280px, 80vw, 360px);
+    background: var(--card);
+    border: 0.5px solid rgba(255,55,95,0.35);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: left;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    box-shadow: 0 20px 60px rgba(255,55,95,0.12);
+  }
+  .msg-card.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .msg-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; color: var(--accent); }
+  .msg-card p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.72); font-weight: 300; margin-bottom: 0.75rem; }
+  .msg-card .sig { font-size: 13px; color: var(--muted); font-style: italic; }
+
+  /* FLOATING HEARTS */
+  .heart {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 18px;
+    animation: floatUp 3s ease-out forwards;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0% { opacity: 0.9; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-120px) scale(0.6); }
+  }
+
+  /* ANIMATIONS */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav ul { gap: 1.25rem; }
+    nav a { font-size: 12px; }
+    .letters-grid { grid-template-columns: 1fr; }
+    .letter-card:nth-child(1) { border-radius: 20px 20px 0 0; }
+    .letter-card:nth-child(2) { border-radius: 0; }
+    .letter-card:nth-child(3) { border-radius: 0; }
+    .letter-card:nth-child(4) { border-radius: 0 0 20px 20px; }
+    section { padding: 72px 1.25rem 3rem; }
+    #letter { padding: 72px 1.25rem 3rem; }
+  }
+</style>
 </head>
-
 <body>
-    <!-- Navigation -->
-    <nav class="nav">
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#letter">Love Letter</a></li>
-            <li><a href="#music">Music</a></li>
-            <li><a href="#interactive">Love Meter</a></li>
-            <li><a href="#envelope">Special Message</a></li>
-        </ul>
-    </nav>
 
-    <!-- Landing Section -->
-    <section id="home" class="landing">
-        <h1>Happy Birthday My Love ❤️</h1>
-        <p class="birthday-date">2025/07/05</p>
-        <img src="images/front.jpg" alt="Us Together" class="couple-img">
-        <p class="personal-quote">"Every day with you is a gift, but today is extra special because it's your birthday.
-            You make my world complete."</p>
-    </section>
+<nav id="nav">
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#letter">Letter</a></li>
+    <li><a href="#music">Music</a></li>
+    <li><a href="#interactive">Love meter</a></li>
+    <li><a href="#envelope">Message</a></li>
+  </ul>
+</nav>
 
-    <!-- Love Letter Section -->
-    <section id="letter" class="love-letter">
-        <h2>My Love Letter to You</h2>
-        <div class="letter-container">
-            <div class="letter-section" data-section="1">
-                <h3>💕 How We Met</h3>
-                <p>Remember that day rom the day I first met you at Uni? It was
-                    like the universe had conspired to
-                    bring us together. The way you smiled, the sound of your laughter, everything about you captured my
-                    heart from that very first moment I saw you. Little did I know that chance encounter
-                    would change my life
-                    forever.</p>
-            </div>
+<!-- HERO -->
+<section id="home">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <p class="hero-eyebrow">05 July 2025</p>
+  <h1 class="hero-title">Happy Birthday,<br>My Love.</h1>
+  <p class="hero-date">Another year more beautiful than the last.</p>
 
-            <div class="letter-section" data-section="2">
-                <h3>🌟 Our Best Memories</h3>
-                <p>From the day I first met you at KFC to the last time we sat there together, you got me smiling everyyime I see a glimpse of you.
-                    and your smile has always
-                    made me feel like the happiest person alive. Even if we didn't get to meet after, those midnight
-                    calls, the endless laughter, the way you
-                    just get me, they're moments I'll never forget.
+  <!-- Replace src with your image path, e.g. images/front.jpg -->
+  <!-- If you have the image, use: <img src="images/front.jpg" alt="Us" class="hero-photo"> -->
+  <div class="hero-photo-fallback">💝</div>
 
-                    The way you light up any room, your love for life, the way you always find a way to make me smile,
-                    those are the things I cherish most. And I always will.</p>
-            </div>
+  <p class="hero-quote">"Every day with you is a gift — but today is extra special. You make my world complete."</p>
+</section>
 
-            <div class="letter-section" data-section="3">
-                <h3>💖 What I Love Most About You</h3>
-                <p>
-                    Since the day I got to know you, you've been my safe place. Somewhere I could always be myself. You
-                    made everything feel a little less heavy, a little more beautiful.
-                    Your kindness that knows no bounds, your strength to contine with all family problems that inspires
-                    me daily, your beautiful soul that
-                    makes the world a better place. I love the way you care for others, your determination to chase your
-                    dreams, and most of all, I love how you love me. You're not just my girlfriend, you're my best
-                    friend, my soulmate, my everything.</p>
-            </div>
+<!-- LOVE LETTER -->
+<section id="letter">
+  <div style="width:100%;max-width:800px;text-align:left;">
+    <span class="section-label">A letter for you</span>
+    <h2 class="section-title">Written from the heart.</h2>
+    <div class="letters-grid">
+      <div class="letter-card" data-reveal>
+        <h3>How we met</h3>
+        <p>From the moment I first saw you at Uni, the universe conspired to bring us together. Your smile, your laugh — everything about you captured my heart instantly. That chance encounter changed my life forever.</p>
+      </div>
+      <div class="letter-card" data-reveal>
+        <h3>Our best memories</h3>
+        <p>From our first time at KFC to every midnight call, every burst of laughter — I smile every time I get even a glimpse of you. Those moments are ones I'll carry with me always.</p>
+      </div>
+      <div class="letter-card" data-reveal>
+        <h3>What I love most</h3>
+        <p>Your kindness, your strength through everything life's thrown at you, your beautiful soul. You've been my safe place since the day I got to know you. You're not just my girlfriend — you're my best friend, my soulmate, my everything.</p>
+      </div>
+      <div class="letter-card" data-reveal>
+        <h3>My promise to you</h3>
+        <p>I promise to love you more every single day — to be your biggest supporter, your shoulder to cry on, and your partner in every adventure life brings. You deserve all the happiness in this world.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="letter-section" data-section="4">
-                <h3>💝 My Promise to You</h3>
-                <p>On your special day, I promise to love you more with each passing day. I promise to be your biggest
-                    supporter, your shoulder to cry on, and your partner in all of life's adventures. I promise to make
-                    you laugh, to hold you when you need comfort, and to always remind you how incredibly special you
-                    are. You deserve all the happiness in the world, and I promise to do everything in my power to give
-                    it to you.</p>
-            </div>
-        </div>
-    </section>
+<!-- MUSIC -->
+<section id="music">
+  <span class="section-label">A song for you</span>
+  <h2 class="section-title" style="text-align:center;">This reminds me of you.</h2>
+  <div class="music-wrap">
+    <iframe src="https://open.spotify.com/embed/track/47Slg6LuqLaX0VodpSCvPt?utm_source=generator"
+      height="352" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"></iframe>
+  </div>
+</section>
 
-    <!-- Music Section -->
-    <section id="music" class="music-section">
-        <h2>This song always reminds me of you 🖤</h2>
-        <div class="music-controls">
-            <iframe style="border-radius:12px"
-                src="https://open.spotify.com/embed/track/47Slg6LuqLaX0VodpSCvPt?utm_source=generator" width="100%"
-                height="352" frameBorder="0" allowfullscreen=""
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"></iframe>
-        </div>
-    </section>
+<!-- LOVE METER -->
+<section id="interactive">
+  <span class="section-label">Just for fun</span>
+  <h2 class="section-title" style="text-align:center;">The love meter.</h2>
+  <div class="meter-card">
+    <h3>How much do you love me?</h3>
+    <div class="slider-row">
+      <div class="slider-label"><span>A little</span><span>Infinity</span></div>
+      <input type="range" min="0" max="100" value="50" id="loveslider" step="1">
+    </div>
+    <span class="slider-val" id="loveval">50%</span>
+    <p class="love-msg" id="lovemsg">Slide to show me...</p>
+  </div>
+</section>
 
-    <!-- Interactive Section -->
-    <section id="interactive" class="interactive">
-        <h2>💕 Love Meter</h2>
-        <div class="love-meter">
-            <h3>How much do you love me?</h3>
-            <div class="slider-container">
-                <input type="range" min="0" max="100" value="50" class="love-slider" id="loveSlider">
-                <p>Slide to show your love level: <span id="loveValue">50</span>%</p>
-            </div>
-            <div class="love-response" id="loveResponse"></div>
-        </div>
-    </section>
+<!-- SPECIAL MESSAGE -->
+<section id="envelope">
+  <span class="section-label">Open me</span>
+  <h2 class="section-title">A special message.</h2>
+  <p style="color:var(--muted);font-size:15px;font-weight:300;">Tap the envelope when you're ready.</p>
+  <div class="envelope-wrap">
+    <div class="msg-card" id="msgcard">
+      <h3>💝 Happy Birthday, my love!</h3>
+      <p>You are the most amazing person I've ever known. Thank you for being you, for loving me, and for making every single day feel like a celebration.</p>
+      <p>I can't wait to spend many more birthdays with you — laughing, growing, and loving each other more than the day before.</p>
+      <p class="sig">Forever yours, with all my love ❤️</p>
+    </div>
+    <button class="env-btn" id="envbtn" onclick="openEnvelope()" aria-label="Open envelope">
+      <span class="env-icon" id="envicon">💌</span>
+    </button>
+    <p class="env-hint" id="envhint">tap to open</p>
+  </div>
+</section>
 
-    <!-- Envelope Section -->
-    <section id="envelope" class="envelope-section">
-        <h2>💌 Special Message</h2>
-        <p>Click the envelope to reveal a special birthday message</p>
-        <div class="envelope" onclick="openEnvelope()">
-            <div class="letter-inside">
-                <h3>💝 Happy Birthday My Love!</h3>
-                <p>You are the most amazing person I've ever known. Thank you for being you, for loving me, and for
-                    making every day feel like a celebration. I can't wait to spend many more birthdays with you!</p>
-                <p class="signature">Forever Yours,<br>With All My Love ❤️</p>
-            </div>
-        </div>
-    </section>
+<script>
+  // Nav hide on scroll down
+  let lastY = 0;
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.classList.toggle('hide', y > lastY + 4 && y > 60);
+    if (y < lastY - 4 || y < 60) nav.classList.remove('hide');
+    lastY = y;
+  }, { passive: true });
 
-    <script>
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+  // Reveal letter cards
+  const cards = document.querySelectorAll('[data-reveal]');
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 120);
+        ro.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(c => ro.observe(c));
 
-        // Letter section animations
-        const observerOptions = {
-            threshold: 0.5,
-            rootMargin: '0px 0px -100px 0px'
-        };
+  // Love meter
+  const slider = document.getElementById('loveslider');
+  const val = document.getElementById('loveval');
+  const msg = document.getElementById('lovemsg');
+  const msgs = [
+    [0,  24, "Come on, you can do better! 😅"],
+    [25, 49, "Hmm... I know it's more than that. 🥺"],
+    [50, 74, "That's sweet — but I think there's room for more 💕"],
+    [75, 99, "Now we're talking! You're incredible 💖"],
+    [100,100,"INFINITE LOVE! That's the one 💕💕💕"],
+  ];
+  slider.addEventListener('input', function() {
+    const v = +this.value;
+    val.textContent = v + '%';
+    val.style.color = v === 100 ? '#ffd60a' : 'var(--accent)';
+    const found = msgs.find(m => v >= m[0] && v <= m[1]);
+    msg.textContent = found ? found[2] : '';
+    spawnHeart();
+  });
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+  // Envelope
+  let opened = false;
+  function openEnvelope() {
+    if (opened) return;
+    opened = true;
+    document.getElementById('envbtn').classList.add('opened');
+    document.getElementById('envicon').textContent = '💝';
+    document.getElementById('envhint').textContent = '✨';
+    document.getElementById('msgcard').classList.add('show');
+    for (let i = 0; i < 8; i++) setTimeout(spawnHeart, i * 150);
+  }
 
-        document.querySelectorAll('.letter-section').forEach(section => {
-            observer.observe(section);
-        });
+  // Hearts
+  function spawnHeart() {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = ['❤️','💕','💖','💝'][Math.floor(Math.random()*4)];
+    h.style.left = Math.random() * 90 + 5 + 'vw';
+    h.style.top = Math.random() * 70 + 10 + 'vh';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 3100);
+  }
+  setInterval(() => { if (Math.random() > 0.6) spawnHeart(); }, 4000);
 
-        // Music player functionality
-        let isPlaying = false;
-        function toggleMusic() {
-            const player = document.getElementById('musicPlayer');
-            const btn = document.querySelector('.play-btn');
-
-            if (isPlaying) {
-                player.style.display = 'none';
-                btn.textContent = '🎵 Play Our Song';
-                isPlaying = false;
-            } else {
-                player.style.display = 'block';
-                btn.textContent = '⏸️ Pause Music';
-                isPlaying = true;
-            }
-        }
-
-        // Love meter functionality
-        const loveSlider = document.getElementById('loveSlider');
-        const loveValue = document.getElementById('loveValue');
-        const loveResponse = document.getElementById('loveResponse');
-
-        loveSlider.addEventListener('input', function () {
-            const value = this.value;
-            loveValue.textContent = value;
-
-            let response = '';
-            if (value < 25) {
-                response = '💔 Aww, you can do better than that!';
-            } else if (value < 50) {
-                response = '💕 Cmonn... I know you love me more!';
-            } else if (value < 75) {
-                response = '💖 That\'s more like it! You\'re so sweet!';
-            } else if (value < 100) {
-                response = '💝 Almost perfect! You\'re amazing!';
-            } else {
-                response = '💕💕💕 PERFECT! I love you infinity + 1! 💕💕💕';
-            }
-
-            loveResponse.textContent = response;
-            loveResponse.classList.add('show');
-        });
-
-        // Envelope functionality
-        function openEnvelope() {
-            const envelope = document.querySelector('.envelope');
-            envelope.classList.add('open');
-
-            // Add heartbeat animation to the letter
-            setTimeout(() => {
-                const letterInside = document.querySelector('.letter-inside');
-                letterInside.classList.add('heartbeat');
-            }, 500);
-        }
-
-        // Add some sparkle effects
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.innerHTML = '✨';
-            sparkle.style.position = 'fixed';
-            sparkle.style.left = Math.random() * window.innerWidth + 'px';
-            sparkle.style.top = Math.random() * window.innerHeight + 'px';
-            sparkle.style.fontSize = '20px';
-            sparkle.style.pointerEvents = 'none';
-            sparkle.style.zIndex = '1000';
-            sparkle.style.animation = 'fadeInUp 2s ease forwards';
-
-            document.body.appendChild(sparkle);
-
-            setTimeout(() => {
-                sparkle.remove();
-            }, 2000);
-        }
-
-        // Create sparkles periodically
-        setInterval(createSparkle, 3000);
-
-        // Add some initial sparkles
-        for (let i = 0; i < 5; i++) {
-            setTimeout(createSparkle, i * 200);
-        }
-    </script>
+  // Smooth nav clicks
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
 </body>
-
 </html>
